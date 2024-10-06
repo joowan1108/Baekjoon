@@ -15,7 +15,8 @@ def binarysearch(arr):
         for line in lines:
             #나머지가 만들 수 있는 랜선의 개수
             count+=(line//mid)
-        if(count>=n):
+        if(count>=n): #--> 최대 랜선 길이를 구하는 것이므로 count>=n을 해야함
+        
             #만들어지는 랜선의 개수가 너무 많다면 자르는 길이가 너무 짧은 것
             start=mid+1
         else:
