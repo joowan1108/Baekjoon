@@ -1,38 +1,30 @@
 import sys
-from collections import deque
+from collections import defaultdict, deque
 
-n = int(sys.stdin.readline().rstrip())
+input = sys.stdin.readline
 
-pairs = int(sys.stdin.readline().rstrip())
-
-graph = [[] for _ in range(n+1)]
-
-for _ in range(pairs):
-    i,j = map(int, sys.stdin.readline().rstrip().split())
+n = int(input())
+m = int(input())
+graph = defaultdict(list)
+stack = deque()
+for _ in range(m):
+    i,j = map(int, input().split())
     graph[i].append(j)
     graph[j].append(i)
+
+visited = [False]*(n+1)
+
+def dfs(start):
+    stack.append(start)
+    while stack:
+        v = stack.pop()
+        if not visited[v]:
+            visited[v]=True
+            for u in graph[v]:
+                stack.append(u)
+
+dfs(1)
+print(visited.count(True)-1)
     
-def dfs(graph, start_node):
-    result = 0
-    visited = [0]*(n+1) #방문 여부 확인하기 위한 것
-    need_visited = deque() #dfs를 하기 위해 필요한 stack
     
-    need_visited.append(start_node) #시작
-    while need_visited:
-        node = need_visited.pop() #방문해야 할 node 가져오기
-        if visited[node]==0: #방문한 노드가 아니라면
-            result+=1 #바이러스 추가 감염
-            visited[node]=1#방문 처리
-            need_visited.extend(graph[node]) #방문해야 할 node들 추가
-    return result
-result = dfs(graph,1)
-print(result-1)
-        
-        
     
-
-    
-
-
-
-
