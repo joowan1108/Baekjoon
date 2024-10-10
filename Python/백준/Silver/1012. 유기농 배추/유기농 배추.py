@@ -1,38 +1,44 @@
 import sys
 from collections import deque
 
-t = int(input())
+input = sys.stdin.readline
 moves = [(0,1),(0,-1),(1,0),(-1,0)]
-def bfs(graph, visited, start_w, start_h):
-    need_visited = deque()
-    need_visited.append((start_h, start_w))
-    while need_visited:
-        node_height, node_width = need_visited.popleft()
-        if(visited[node_height][node_width]==0 and graph[node_height][node_width]==1):
-            visited[node_height][node_width]=1
-            for dx, dy in moves:
-                new_height = node_height+dy
-                new_width = node_width + dx
-                if(0<=new_height<height and 0<=new_width<width):
-                    need_visited.append((new_height, new_width))
-                    
-    return visited
+
+#탐색하는 영역이 작기 때문에 속도가 더 빠른 bfs 사용
+def bfs(x,y, farm, n, m):
+    q = deque()
+    q.append((x,y))
+    while q:
+        a,b = q.popleft()
+        for dx, dy in moves:
+            aa = a+dx
+            bb = b+dy
+            if(aa>=0 and aa<n and bb>=0 and bb<m):
+                if(farm[aa][bb]==1):
+                    q.append((aa,bb))
+                    farm[aa][bb]=0
+    return farm 
     
-    
-    
+t = int(input())
 for _ in range(t):
-    worms = 0
-    width, height, vegs = map(int, sys.stdin.readline().rstrip().split())
-    graph = [[0 for _ in range(width)] for _ in range(height)]
-    visited = [[0 for _ in range(width)] for _ in range(height)]
-    for _ in range(vegs):
-        w, h = map(int, sys.stdin.readline().rstrip().split())
-        graph[h][w]=1
-    for i in range(height):
-        for j in range(width):
-            if(graph[i][j]==1 and visited[i][j]==0):
-                visited = bfs(graph, visited, j, i)
-                worms+=1
-        
-    print(worms)
-        
+    cnt=0
+    m,n,k = map(int, input().split())
+    
+    farm = [[0 for _ in range(m)] for _ in range(n)]
+    
+    for _ in range(k):
+        x,y = map(int, input().split())
+        farm[y][x]=1
+    
+    for i in range(n):
+        for j in range(m):
+            if(farm[i][j]==1):
+                farm=bfs(i,j, farm, n,m)
+                cnt+=1
+    
+    print(cnt)
+    
+    
+    
+    
+    
