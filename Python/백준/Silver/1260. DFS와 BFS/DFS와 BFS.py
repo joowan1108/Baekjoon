@@ -1,43 +1,54 @@
-
+from collections import defaultdict, deque
 import sys
-from collections import deque
-import copy
 
-n,m,v = map(int, sys.stdin.readline().rstrip().split())
+input = sys.stdin.readline
 
-graph = [[] for _ in range(n+1)]
+n,m,v = map(int, input().split())
+
+graph = defaultdict(list)
+
 for _ in range(m):
-    i,j = map(int, sys.stdin.readline().rstrip().split())
-    graph[i].append(j)
-    graph[j].append(i)
-graph_dfs = copy.deepcopy(graph)
+    a,b = map(int, input().split())
+    graph[a].append(b)
+    graph[b].append(a)
 
-for i in range(1, n+1):
-    graph[i].sort()
-    graph_dfs[i].sort(reverse=True)
+for g in graph:
+    graph[g].sort()
 
-def bfs(graph, start):
-    visited = set()
-    need_visited = deque()
-    need_visited.append(start)
-    while need_visited:
-        node = need_visited.popleft()
-        if(node not in visited):
-            visited.add(node)
-            need_visited.extend(graph[node])
-            print(node, end= ' ')
+visited_dfs = [0 for _ in range(n+1)]
+dfs_result = []
+def dfs(start):
+    visited_dfs[start]=1
+    dfs_result.append(start)
+    for i in graph[start]:
+        if visited_dfs[i]!=1:
+            dfs(i)
+        
+dfs(v)
 
-def dfs(graph, start):
-    visited = set()
-    need_visited = deque()
-    need_visited.append(start)
-    while need_visited:
-        node = need_visited.pop()
-        if(node not in visited):
-            visited.add(node)
-            need_visited.extend(graph[node])
-            print(node, end= ' ')
+visited_bfs = [0 for _ in range(n+1)]
+bfs_result = []
+def bfs(start):
+    q = deque()
+    visited_bfs[start]=1
+    q.append(start)
+    while q:
+        tmp = q.popleft()
+        bfs_result.append(tmp)
+        for t in graph[tmp]:
+            if visited_bfs[t]!=1:
+                q.append(t)
+                visited_bfs[t]=1
 
-dfs(graph_dfs, v)
-print()
-bfs(graph, v)
+bfs(v)
+
+for i in range(len(dfs_result)-1):
+    print(dfs_result[i], end=' ')
+print(dfs_result[-1])
+
+for i in range(len(bfs_result)-1):
+    print(bfs_result[i], end=' ')
+print(bfs_result[-1])
+    
+
+    
