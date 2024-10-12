@@ -1,50 +1,49 @@
 import sys
-from collections import deque
+from  collections import deque
 
-n = int(sys.stdin.readline().rstrip())
+input = sys.stdin.readline
+
+n = int(input())
 
 graph = []
-num_of_houses = []
+visited = [[0 for _ in range(n)] for _ in range(n)]
 
 for _ in range(n):
-    graph.append(list(map(int, input())))
+	graph.append(list(map(int, input().strip())))
 
-dx = [-1,1,0,0]
-dy = [0,0,1,-1]
-    
-def bfs(graph, start_node):
-    need_visited = deque() #dfs를 하기 위해 필요한 stack
-    need_visited.append((start_node[0],start_node[1])) #시작
-    graph[start_node[0]][start_node[1]] = 0
-    sum=1
-    while need_visited:
-        node = need_visited.popleft() #방문해야 할 node 가져오기
-        for k in range(4):
-            new_x = node[0]+dx[k]
-            new_y = node[1]+dy[k]
-            if(new_x<0 or new_x>=n or new_y<0 or new_y>=n):
-                continue
-            if(graph[new_x][new_y]==1):
-                sum+=1
-                graph[new_x][new_y]=0
-                need_visited.append((new_x, new_y))
-    return sum
+moves=[(1,0),(-1,0),(0,1),(0,-1)]
+num_houses = []
 
+def bfs(x,y):
+	houses=1
+	q = deque()
+	q.append((x,y))
+	visited[x][y]=1
+	while q:
+		a,b = q.popleft()
+		for move in moves:
+			aa = a + move[0]
+			bb = b+move[1]
+			if(0<=aa<n and 0<=bb<n and graph[aa][bb]==1 and visited[aa][bb]==0):
+				q.append((aa,bb))
+				visited[aa][bb]=1
+				houses+=1
+	num_houses.append(houses)
+	
+cnt = 0
 for i in range(n):
-    for j in range(n):
-        if(graph[i][j]==1):
-            num_of_houses.append(bfs(graph,(i,j)))
+	for j in range(n):
+		if(graph[i][j]==1 and visited[i][j]==0):
+			bfs(i,j)
+			cnt+=1
 
-num_of_houses.sort()
+print(cnt)
+num_houses.sort()
 
-print(len(num_of_houses))
-for num in num_of_houses:
-    print(num)
-        
-    
-
-    
-
+for h in num_houses:
+	print(h)
+			
+		
 
 
-
+	
