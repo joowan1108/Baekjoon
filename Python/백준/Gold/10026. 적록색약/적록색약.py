@@ -1,64 +1,70 @@
 import sys
-import copy
-from collections import deque
+from  collections import deque
 
-n = int(sys.stdin.readline().rstrip())
+input = sys.stdin.readline
+
+n = int(input())
 
 graph = []
 
 for _ in range(n):
-    input_lst = list(sys.stdin.readline().rstrip())
-    graph.append(input_lst)
+	graph.append(input().strip())
 
-weird_graph = copy.deepcopy(graph)
+moves=[(1,0),(-1,0),(0,1),(0,-1)]
 
+# 색맹 처리한 graph 따로 만들기
+graph_weird = [list(row) for row in graph]
 for i in range(n):
-    for j in range(n):
-        if(weird_graph[i][j]=='G'):
-            weird_graph[i][j]='R'
-    
-visited_weird = [[0 for _ in range(n)] for _ in range(n)]
-visited_normal = [[0 for _ in range(n)] for _ in range(n)]
-num_of_areas_weird = 0
-num_of_areas = 0
+	for j in range(n):
+		if(graph_weird[i][j]=='G'):
+			graph_weird[i][j]='R'
+			
+#bfs			
+def bfs(i,j,c,visited,g):
+	q = deque()
+	q.append((i,j))
+	visited[i][j]=1
+	while q:
+		x,y = q.popleft()
+		for move in moves:
+			xx = x+move[0]
+			yy = y+move[1]
+			if(0<=xx<n and 0<=yy<n and g[xx][yy]==c and visited[xx][yy]==0):
+				q.append((xx,yy))
+				visited[xx][yy]=1
+	return visited
+			
+colors = ['R', 'G', 'B']
+cnt_normal=0
 
-def dfs(dfs_graph,x,y, visited):
-    start = dfs_graph[x][y]
-    need_visit = deque()
-    need_visit.append((x,y))
-    
-    while need_visit:
-        node = need_visit.pop()
-        if(visited[node[0]][node[1]]==0 and dfs_graph[node[0]][node[1]]==start):
-            visited[node[0]][node[1]]=1
-            for dx,dy in [(-1,0), (1,0), (0,1), (0,-1)]:
-                new_x = node[0]+dx
-                new_y = node[1]+dy
-                if(new_x<0 or new_x>=n or new_y<0 or new_y>=n):
-                    continue
-                else:
-                    need_visit.append((new_x, new_y))
-    return visited
-                
-
-for i in range(n):
-    for j in range(n):
-        if(visited_weird[i][j]==0):
-            visited_weird = dfs(weird_graph,i,j, visited_weird)
-            num_of_areas_weird+=1
-
-for i in range(n):
-    for j in range(n):
-        if(visited_normal[i][j]==0):
-            visited_normal = dfs(graph,i,j, visited_normal)
-            num_of_areas+=1
-            
-print("{} {}".format(num_of_areas, num_of_areas_weird))
+for color in colors:
+	visited_normal = [[0 for _ in range(n)] for _ in range(n)]
+	for a in range(n):
+		for b in range(n):
+			if(graph[a][b]==color and visited_normal[a][b]==0):
+				visited_normal = bfs(a,b,color,visited_normal, graph)
+				cnt_normal+=1
 
 
+print(cnt_normal, end=' ')
+
+colors_weird= ['R','B']
+cnt_weird = 0
+
+for color in colors_weird:
+	visited_weird = [[0 for _ in range(n)] for _ in range(n)]
+	for a in range(n):
+		for b in range(n):
+			if(graph_weird[a][b]==color and visited_weird[a][b]==0):
+				visited_weird = bfs(a,b,color, visited_weird, graph_weird)
+				cnt_weird+=1
+
+print(cnt_weird)
+				
+			
+			
+	
+		
 
 
-    
-        
-        
-    
+	
