@@ -1,23 +1,26 @@
 import sys
+
 input = sys.stdin.readline
 
-p = 'I'
-n = int(input())
-for _ in range(n):
-	p=p+'O'+'I'
-	
-m = int(input())
+n = int(input().rstrip())
+m = int(input().rstrip())
 s = input().rstrip()
 
-start = 0
-end = 2*n
-cnt=0
+i=0
+IOI_cnt=0
+nums = 0
 
-while end<m:
-	window = s[start:end+1]
-	if(window==p):
-		cnt+=1
-	start+=1
-	end+=1
+while i<m-1:
+	tmp = s[i:i+3]
+	if(tmp=='IOI'):
+		i+=2
+		IOI_cnt +=1
+		if(IOI_cnt==n):
+			nums+=1
+			IOI_cnt-=1
+	else:
+		i+=1
+		IOI_cnt=0
 
-print(cnt)
+print(nums)
+		
