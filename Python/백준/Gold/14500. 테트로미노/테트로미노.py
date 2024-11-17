@@ -11,9 +11,17 @@ visited = [[False]*m for _ in range(n)]
 max_=0
 moves = [(-1,0), (1,0), (0,-1), (0,1)]
 
+num_maximum = 0
+for i in range(n):
+    for j in range(m):
+        if num_maximum < nums[i][j]:
+            num_maximum = nums[i][j]
+        
 
 def dfs(current, val, cnt):
 	global max_
+	if(max_ >= val+(4-cnt)*num_maximum):
+		return
 	if(cnt==4):
 		max_ = max(max_, val)
 		return
