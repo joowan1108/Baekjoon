@@ -6,7 +6,7 @@ k = int(input())
 
 answer = 0
 start = 1
-end = k
+end = n**2
 while start <= end:
   mid = (start+end)//2
   small_equal_cnt = 0
