@@ -28,32 +28,31 @@ fire_time = [[-1]*m for _ in range(n)]
 for h,w in fires:
   fire_time[h][w] = 0
 
-
+#J는 하나
 j_time = [[-1]*m for _ in range(n)]
 j_time[j_h][j_w] = 0
 
-
 def bfs(fires, j_h, j_w):
   min_dist = -1
-  for f_h, f_w in fires:
-    q = deque([(f_h, f_w)])
-    while q:
-      h,w = q.popleft()
-      for dh, dw in moves:
-        new_h, new_w = h+dh, w+dw
-        #index 맞고 벽 아니고 방문한 적 없거나 이전 불 위치가 간 시간보다 짧을 때만 update
-        if 0<=new_h<n and 0<=new_w<m and (maze[new_h][new_w]!="#" and maze[new_h][new_w]!='F') and (fire_time[new_h][new_w] == -1 or fire_time[h][w]+1 < fire_time[new_h][new_w]):
-          fire_time[new_h][new_w] = fire_time[h][w]+1
-          q.append((new_h, new_w))
+  q = deque(fires)
+  while q:
+    h,w = q.popleft()
+    for dh, dw in moves:
+      new_h, new_w = h+dh, w+dw
+      #index 맞고 벽 아니고 방문한 적 없거나 이전 불 위치가 간 시간보다 짧을 때만 update
+      new_time = fire_time[h][w]+1
+      if 0<=new_h<n and 0<=new_w<m and (maze[new_h][new_w]!="#" and maze[new_h][new_w]!='F') and (fire_time[new_h][new_w] == -1 or new_time < fire_time[new_h][new_w]):
+        fire_time[new_h][new_w] = new_time
+        q.append((new_h, new_w))
 
-  
-  q = deque()
+  #J의 이동
   q.append((j_h, j_w))
   while q:
     h,w = q.popleft()
     if (h==n-1 or w==m-1 or h==0 or w==0) and j_time[h][w]!=-1:
       min_dist = j_time[h][w]
       break
+      
     for dh, dw in moves:
       new_h, new_w = h+dh, w+dw
       if 0<=new_h<n and 0<=new_w<m and maze[new_h][new_w]=='.' and j_time[new_h][new_w] == -1:
