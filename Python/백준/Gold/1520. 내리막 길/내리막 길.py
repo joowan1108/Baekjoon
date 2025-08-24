@@ -1,6 +1,5 @@
 import sys
 sys.setrecursionlimit(10 ** 8)
-from collections import deque
 input = sys.stdin.readline
 
 m,n = map(int, input().split())
@@ -16,6 +15,8 @@ dfs를 진행
 방문했던 곳이라면 그 경로의 개수를 목적지 경로 수에 더한다
 
 dp: a->b,c일 때 a에서 목적지로 가는 경우의 수는 b에서 목적지로 가는 경우의 수 + c에서 목적지로 가는 경우의 수
+
+-1로 초기화하는 이유는 0으로 방문했는데 경로가 없는 경우를 나타내기 위해서이다.
 """
 
 visited = [[-1]*(n) for _ in range(m)]
