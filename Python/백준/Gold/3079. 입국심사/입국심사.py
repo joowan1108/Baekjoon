@@ -8,7 +8,7 @@ for _ in range(n):
   test.append(int(input()))
 
 start = min(test)
-end = max(test) * m
+end = max(test) * (m//n+1)
 
 
 """
