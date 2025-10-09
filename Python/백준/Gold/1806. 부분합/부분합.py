@@ -9,7 +9,7 @@ prefix_sum = [0]*(n+1)
 for i in range(1,n+1):
   prefix_sum[i] = prefix_sum[i-1] + nums[i]
 
-start, end = 0,0
+start, end = 0,1
 ans = int(1e9)
 while start <= end and end<=n:
   if prefix_sum[end] - prefix_sum[start] < s:
