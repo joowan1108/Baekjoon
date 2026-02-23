@@ -43,7 +43,7 @@ expand 만큼 확장하고 끝내기. 남은 지점들은 queue에 저장
 '''
 
 def bfs(player, queue, expand, turn):
-  q = deque(queue)
+  q = queue
   expanded_once = False
   while q:
     h,w,times = q.popleft()
@@ -60,7 +60,6 @@ def bfs(player, queue, expand, turn):
         placed_nums[player]+=1
         expanded_once = True
         
-  queues[player] = q
   # for place in is_placed:
   #   print(place)
   # print('=========')
